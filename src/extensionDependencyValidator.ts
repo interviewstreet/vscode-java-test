@@ -14,7 +14,7 @@ import { commands, extensions, Extension, OutputChannel, window } from 'vscode';
 const logger: OutputChannel = window.createOutputChannel('Java Test Runner');
 
 const WAIT_TIME_MS: number = 3000; // 3 seconds
-const MAX_ATTEMPTS: number = 60; // 40 attempts * 3 seconds = 120 seconds (2 minutes)
+const MAX_ATTEMPTS: number = 60; // 60 attempts * 3 seconds = 120 seconds (2 minutes)
 
 
 /**
@@ -85,7 +85,7 @@ export async function waitForExtensionDependencies(): Promise<boolean> {
         );
 
         // Push failure to New Relic via VSCode command
-        commands.executeCommand('hackerrank.logError', new Error('[vacode-java-test] Extension activation failed'), {
+        commands.executeCommand('hackerrank.logError', new Error('[vscode-java-test] Extension activation failed'), {
             failedExtensions: failed
         });
 
@@ -93,7 +93,7 @@ export async function waitForExtensionDependencies(): Promise<boolean> {
     }
     logger.appendLine('[waitDeps] All dependencies activated successfully.');
     // ✅ Push performance metric to New Relic
-    commands.executeCommand('hackerrank.logMessage', '[vacode-java-test] All dependencies extensions activated', {
+    commands.executeCommand('hackerrank.logMessage', '[vscode-java-test] All dependencies extensions activated', {
         durationMs: duration
     });
     return true;
