@@ -14,7 +14,7 @@ import { commands, extensions, Extension, OutputChannel, window } from 'vscode';
 const logger: OutputChannel = window.createOutputChannel('Java Test Runner');
 
 const WAIT_TIME_MS: number = 3000; // 3 seconds
-const MAX_ATTEMPTS: number = 60; // 60 attempts * 3 seconds = 120 seconds (2 minutes)
+const MAX_ATTEMPTS: number = 60; // 60 attempts * 3 seconds = 180 seconds (3 minutes)
 
 
 /**
