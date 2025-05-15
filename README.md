@@ -150,3 +150,6 @@ npm run build-plugin
 npm run extension
 ```
 - Outputs .vsix (~2.9 MB) for version 0.43.0
+
+## Note
+- Version `0.43.1` is not comaptible with `1.38.0` of  redhat.java LSP Extension.
