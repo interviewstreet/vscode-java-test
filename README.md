@@ -135,3 +135,18 @@ This extension is licensed under [MIT License](LICENSE.txt).
 ## Telemetry
 
 This extension collects telemetry data to help improve our products. Please read [Microsoft privacy statement](https://privacy.microsoft.com/en-us/privacystatement) to learn more. If you opt out to send telemetry data to Microsoft, please set below configuration in settings.json: `telemetry.enableTelemetry = false`. Learn more in our [FAQ](https://code.visualstudio.com/docs/supporting/faq#_how-to-disable-telemetry-reporting).
+
+# HackerRank Build Requirements
+- Main branch of this repo is `hackerrank-master`
+- Java 21 (`java --version`)
+- Node.js 20
+- Mac ARM64 (`uname -m` → should return `arm64`)
+
+## 📦 Build & Package
+
+```bash
+npm install
+npm run build-plugin
+npm run extension
+```
+- Outputs .vsix (~2.9 MB) for version 0.43.0
