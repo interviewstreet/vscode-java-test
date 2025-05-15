@@ -7,13 +7,14 @@
  * - Fails only if any required extension fails to activate within the total timeout.
  */
 
-import { extensions, Extension, OutputChannel, window } from 'vscode';
+import { performance } from 'perf_hooks';
+import { commands, extensions, Extension, OutputChannel, window } from 'vscode';
 
 // Create an OutputChannel for logging
 const logger: OutputChannel = window.createOutputChannel('Java Test Runner');
 
-const WAIT_TIME_MS: number = 4000; // 3 seconds
-const MAX_ATTEMPTS: number = 45; // 40 attempts * 3 seconds = 120 seconds (2 minutes)
+const WAIT_TIME_MS: number = 3000; // 3 seconds
+const MAX_ATTEMPTS: number = 60; // 40 attempts * 3 seconds = 120 seconds (2 minutes)
 
 
 /**
@@ -65,12 +66,14 @@ export async function waitForExtensionDependencies(): Promise<boolean> {
         'vscjava.vscode-java-debug'
     ];
     const results: Record<string, boolean> = {};
+    const start: number = performance.now();
     await Promise.all(
         extensionDependencies.map(async (depId: string) => {
             logger.appendLine(`[waitDeps] Waiting for ${depId}...`);
             results[depId] = await waitForExtension(depId);
         })
     );
+    const duration: number = Math.round(performance.now() - start);
     const failed: string[] = Object.entries(results)
         .filter(([, success]: [string, boolean]) => !success)
         .map(([depId]: [string, boolean]) => depId);
@@ -80,8 +83,18 @@ export async function waitForExtensionDependencies(): Promise<boolean> {
         window.showErrorMessage(
             `Activation failed: Java Test Runner requires the ${failedDepsString} extension(s), but they did not activate in time.`
         );
+
+        // Push failure to New Relic via VSCode command
+        commands.executeCommand('hackerrank.logError', new Error('[vacode-java-test] Extension activation failed'), {
+            failedExtensions: failed
+        });
+
         return false;
     }
     logger.appendLine('[waitDeps] All dependencies activated successfully.');
+    // ✅ Push performance metric to New Relic
+    commands.executeCommand('hackerrank.logMessage', '[vacode-java-test] All dependencies extensions activated', {
+        durationMs: duration
+    });
     return true;
 }
